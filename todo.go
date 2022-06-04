@@ -53,7 +53,7 @@ func (t *TodoList) Delete(pos int) error {
 	*t = append((*t)[:pos], (*t)[pos+1:]...)
 	return nil
 }
-g
+
 func (t *TodoList) Save(filename string) error {
 	js, err := json.Marshal(t)
 	if err != nil {
