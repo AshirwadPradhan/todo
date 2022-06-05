@@ -16,8 +16,9 @@ const filename = "/tmp/todo.json"
 func main() {
 
 	add := flag.Bool("add", false, "Task to be included in the todo list")
-	list := flag.Bool("list", false, "List All Tasks")
-	complete := flag.Int("complete", 0, "Items to be completed")
+	list := flag.Bool("list", false, "List all tasks")
+	complete := flag.Int("mark", 0, "Mark as completed the selected task")
+	delete := flag.Int("del", 0, "Delete the selected task")
 
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "%s tool. Starter Todo App\n", os.Args[0])
@@ -53,6 +54,15 @@ func main() {
 			os.Exit(1)
 		}
 		todos.Add(task)
+		if err := todos.Save(filename); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+	case *delete > 0:
+		if err := todos.Delete(*delete - 1); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
 		if err := todos.Save(filename); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
