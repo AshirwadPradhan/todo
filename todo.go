@@ -84,3 +84,17 @@ func (t *TodoList) Get(filename string) error {
 	}
 	return nil
 }
+
+// Implements Stringer interface
+func (t *TodoList) String() string {
+	out := ""
+
+	for i, item := range *t {
+		prefix := " "
+		if item.IsCompleted {
+			prefix = "X"
+		}
+		out += fmt.Sprintf("%s %d: %s\n", prefix, i+1, item.Task)
+	}
+	return out
+}
