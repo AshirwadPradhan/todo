@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
+	"io"
 	"os"
+	"strings"
 
 	"github.com/AshirwadPradhan/todo"
 )
@@ -12,7 +15,7 @@ const filename = "/tmp/todo.json"
 
 func main() {
 
-	task := flag.String("task", "", "Task to be included in the todo list")
+	add := flag.Bool("add", false, "Task to be included in the todo list")
 	list := flag.Bool("list", false, "List All Tasks")
 	complete := flag.Int("complete", 0, "Items to be completed")
 
@@ -33,11 +36,7 @@ func main() {
 
 	switch {
 	case *list:
-		for _, t := range *todos {
-			if !t.IsCompleted {
-				fmt.Println(t.Task)
-			}
-		}
+		fmt.Println(todos)
 	case *complete > 0:
 		if err := todos.MarkComplete(*complete - 1); err != nil {
 			fmt.Fprintln(os.Stderr, err)
@@ -47,8 +46,13 @@ func main() {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-	case *task != "":
-		todos.Add(*task)
+	case *add:
+		task, err := getTask(os.Stdin, flag.Args()...)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		todos.Add(task)
 		if err := todos.Save(filename); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
@@ -58,4 +62,19 @@ func main() {
 		os.Exit(1)
 	}
 
+}
+
+func getTask(r io.Reader, args ...string) (string, error) {
+	if len(args) > 0 {
+		return strings.Join(args, " "), nil
+	}
+	s := bufio.NewScanner(r)
+	s.Scan()
+	if err := s.Err(); err != nil {
+		return "", err
+	}
+	if len(s.Text()) == 0 {
+		return "", fmt.Errorf("task cannot be blank")
+	}
+	return s.Text(), nil
 }
