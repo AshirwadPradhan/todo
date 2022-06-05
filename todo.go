@@ -35,7 +35,7 @@ func (t *TodoList) MarkComplete(pos int) error {
 	}
 
 	(*t)[pos].IsCompleted = true
-	(*t)[pos].CreatedAt = time.Now()
+	(*t)[pos].CompletedAt = time.Now()
 
 	return nil
 }
