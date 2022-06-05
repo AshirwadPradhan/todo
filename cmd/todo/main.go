@@ -32,7 +32,7 @@ func main() {
 			}
 		}
 	case *complete > 0:
-		if err := todos.MarkComplete(*complete); err != nil {
+		if err := todos.MarkComplete(*complete - 1); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
