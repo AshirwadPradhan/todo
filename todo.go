@@ -98,3 +98,14 @@ func (t *TodoList) String() string {
 	}
 	return out
 }
+
+func (t *TodoList) VerbosePrint() {
+	fmt.Printf("%4s %1s: %20s \t %15s \t %15s\n", "Mark", "#", "Task", "CreatedAt", "CompletedAt")
+	for i, item := range *t {
+		prefix := " "
+		if item.IsCompleted {
+			prefix = "X"
+		}
+		fmt.Printf("%4s %1d: %20s \t %15s \t %15s\n", prefix, i+1, item.Task, item.CreatedAt, item.CompletedAt)
+	}
+}
