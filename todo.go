@@ -2,8 +2,10 @@ package todo
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"time"
 )
 
@@ -69,7 +71,13 @@ func (t *TodoList) Save(filename string) error {
 func (t *TodoList) Get(filename string) error {
 	file, err := ioutil.ReadFile(filename)
 	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil
+		}
 		return fmt.Errorf("error while reading the file from disk: %v", err)
+	}
+	if len(file) == 0 {
+		return nil
 	}
 	if err := json.Unmarshal(file, t); err != nil {
 		return fmt.Errorf("error while unmarshaling todo items from json: %v", err)
