@@ -100,7 +100,7 @@ func (t *TodoList) String() string {
 }
 
 func (t *TodoList) VerbosePrint() {
-	fmt.Printf("%4s %1s: %20s \t %15s \t %15s\n", "Mark", "#", "Task", "CreatedAt", "CompletedAt")
+	fmt.Printf("%4s %1s: %20s \t %25s \t %25s\n", "Mark", "#", "Task", "CreatedAt", "CompletedAt")
 	for i, item := range *t {
 		prefix := " "
 		if item.IsCompleted {
