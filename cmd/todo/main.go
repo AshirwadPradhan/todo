@@ -19,6 +19,7 @@ func main() {
 	list := flag.Bool("list", false, "List all tasks")
 	complete := flag.Int("mark", 0, "Mark as completed the selected task")
 	delete := flag.Int("del", 0, "Delete the selected task")
+	v := flag.Bool("v", false, "Print all info about the tasks")
 
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "%s tool. Starter Todo App\n", os.Args[0])
@@ -38,6 +39,8 @@ func main() {
 	switch {
 	case *list:
 		fmt.Println(todos)
+	case *v:
+		todos.VerbosePrint()
 	case *complete > 0:
 		if err := todos.MarkComplete(*complete - 1); err != nil {
 			fmt.Fprintln(os.Stderr, err)
