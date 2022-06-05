@@ -16,6 +16,13 @@ func main() {
 	list := flag.Bool("list", false, "List All Tasks")
 	complete := flag.Int("complete", 0, "Items to be completed")
 
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "%s tool. Starter Todo App\n", os.Args[0])
+		fmt.Fprintf(flag.CommandLine.Output(), "Copyright 2022\n")
+		fmt.Fprintln(flag.CommandLine.Output(), "Usage information:")
+		flag.PrintDefaults()
+	}
+
 	flag.Parse()
 	todos := &todo.TodoList{}
 
